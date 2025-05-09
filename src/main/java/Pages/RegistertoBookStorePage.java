@@ -12,36 +12,49 @@ public class RegistertoBookStorePage {
 	By captcha = By.xpath("//*[@id='recaptcha-anchor']");
 	By register = By.xpath("//*[@id='register']");
 	By backToLogin = By.xpath("//*[@id='gotologin']");
-	
-	public RegistertoBookStorePage(WebDriver driver)
-	{
-		driver=this.driver;
+
+	public RegistertoBookStorePage(WebDriver driver) {
+		this.driver = driver;
 	}
+
 	public String getRandomEmail() {
-	return "Automation"+System.currentTimeMillis()+"@open.com";
-		}
-	
+		return "Automation" + System.currentTimeMillis() + "@open.com";
+	}
+
 	public void enterFirstName(String firstname) {
 		driver.findElement(firstName).sendKeys(firstname);
-		}
+	}
+
 	public void enterLastName(String lastname) {
 		driver.findElement(lastName).sendKeys(lastname);
-		}
+	}
+
 	public void enterUserName(String username) {
 		driver.findElement(usertName).sendKeys(username);
-		}
+	}
+
 	public void enterPasswordName(String Password) {
 		driver.findElement(password).sendKeys(Password);
+	}
+
+	public void ClickCaptch(boolean value) {
+		if (value) {
+			driver.findElement(captcha).click();
 		}
-	public void ClickCaptch( ) {
-		driver.findElement(captcha).click();
+		else
+		{
+		
 		}
+		
+	}
+
 	public void ClickRegister() {
 		driver.findElement(register).click();
-		}
+	}
+
 	public void ClickOnGoBackToLogin() {
 		driver.findElement(backToLogin).click();
-		}
-	
-	//User Register Successfully. -> oK
+	}
+
+	// User Register Successfully. -> oK
 }
