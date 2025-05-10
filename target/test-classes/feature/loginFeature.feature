@@ -2,7 +2,7 @@ Feature: This is for login test
 
 Scenario: Sucessful login feature test
 
-Given Ho
+Given ss
 When fff
 Then sss
 

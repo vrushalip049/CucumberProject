@@ -1,7 +1,9 @@
 package Pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class RegistertoBookStorePage {
 	WebDriver driver;
@@ -37,19 +39,25 @@ public class RegistertoBookStorePage {
 		driver.findElement(password).sendKeys(Password);
 	}
 
-	public void ClickCaptch(boolean value) {
-		if (value) {
-			driver.findElement(captcha).click();
-		}
-		else
-		{
+	public void ClickCaptch(String Captcha) {
 		
+	WebElement captchaCheck= driver.findElement(captcha);
+		if (captchaCheck.isDisplayed()) {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("arguments[0].scrollIntoView(true);", captchaCheck);
+			js.executeScript("arguments[0].click();", captchaCheck);
+			//driver.findElement(captcha).click();
+		} else {
+			System.out.println("Captch is not provided..");
 		}
-		
+
 	}
 
 	public void ClickRegister() {
-		driver.findElement(register).click();
+		WebElement resisterbutton= driver.findElement(register);
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].scrollIntoView(true);", resisterbutton);
+		js.executeScript("arguments[0].click();", resisterbutton);
 	}
 
 	public void ClickOnGoBackToLogin() {

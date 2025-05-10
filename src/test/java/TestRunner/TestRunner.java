@@ -7,7 +7,7 @@ import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-		features = "C:\\Users\\Admin\\2025_eclipse-Automationworkspace\\CucumberProject\\src\\test\\resources\\feature\\RegistrationFeature.feature"
+		features = ".\\src\\test\\resources\\feature\\"
 		,glue={"StepDefinition"},
 		dryRun=false
 		)

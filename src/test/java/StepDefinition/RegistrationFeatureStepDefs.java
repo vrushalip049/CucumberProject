@@ -2,6 +2,8 @@ package StepDefinition;
 
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -17,7 +19,7 @@ import utility.ConfigFileReader;
 import org.apache.log4j.Logger;
 
 public class RegistrationFeatureStepDefs extends BaseClass {
-	//private WebDriver driver;
+	// private WebDriver driver;
 	private RegistertoBookStorePage registertoBookStorePage;
 	// Initialize Log4j logs
 	Logger log = Logger.getLogger("logger");
@@ -49,17 +51,36 @@ public class RegistrationFeatureStepDefs extends BaseClass {
 		Thread.sleep(1000);
 		registertoBookStorePage.enterUserName(password);
 		Thread.sleep(1000);
+		
+		// Switch to reCAPTCHA iframe
+		driver.switchTo().frame(driver.findElement(By.xpath("//iframe[contains(@title, 'reCAPTCHA')]")));
+		// Scroll into view and click via JS
+		
+		
+		
+		registertoBookStorePage.ClickCaptch(captcha);
+		Thread.sleep(1000);
 		// registertoBookStorePage.ClickCaptch();
 
+		// Switch back to the main page
+		driver.switchTo().defaultContent();
 	}
 
 	@Then("click on login page and captcha")
 	public void click_on_login_page_and_captcha() {
-
+		registertoBookStorePage.ClickRegister();
 	}
 
 	@Then("Register successful")
 	public void register_successful() {
-		 closeBrowser();
+		closeBrowser();
 	}
+
+	@Then("Register Unsuccessful")
+	public void register_unsuccessful() {
+
+		log.info("Login unsucessful due to invalid inputs..");
+		closeBrowser();
+	}
+
 }
