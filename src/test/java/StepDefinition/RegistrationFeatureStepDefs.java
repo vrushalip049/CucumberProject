@@ -8,21 +8,24 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import Pages.RegistertoBookStorePage;
-
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import utility.BaseClass;
 import utility.ConfigFileReader;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
+@SpringBootTest
 public class RegistrationFeatureStepDefs extends BaseClass {
+	
+
 	// private WebDriver driver;
 	private RegistertoBookStorePage registertoBookStorePage;
 	// Initialize Log4j logs
-	Logger log = Logger.getLogger("logger");
+	//Logger log = Logger.getLogger("logger");
 
 	/*
 	 * @Before public void setUp() { launchBrowser(); }
@@ -30,7 +33,7 @@ public class RegistrationFeatureStepDefs extends BaseClass {
 	 * @After public void tearDown() { closeBrowser(); }
 	 */
 
-	@SuppressWarnings("deprecation")
+	
 	@Given("User is on Register Home page")
 	public void user_is_on_register_home_page() throws InterruptedException {
 		launchBrowser();
@@ -40,7 +43,7 @@ public class RegistrationFeatureStepDefs extends BaseClass {
 
 	}
 
-	@When("User enter {string} {string} {string}  {string} and {string}")
+	@When("User enter {string} {string} {string} {string} and {string}")
 	public void user_enter_and(String firstname, String lastname, String username, String password, String captcha)
 			throws InterruptedException {
 		registertoBookStorePage.enterFirstName(firstname);
@@ -79,7 +82,7 @@ public class RegistrationFeatureStepDefs extends BaseClass {
 	@Then("Register Unsuccessful")
 	public void register_unsuccessful() {
 
-		log.info("Login unsucessful due to invalid inputs..");
+		//log.info("Login unsucessful due to invalid inputs..");
 		closeBrowser();
 	}
 

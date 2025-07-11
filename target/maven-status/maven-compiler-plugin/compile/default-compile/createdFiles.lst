@@ -1,0 +1,7 @@
+utility\BaseClass.class
+Pages\BookStoreAPIPage.class
+Pages\BookStorePage.class
+Pages\LoginPage.class
+Pages\ProfilePage.class
+Pages\RegistertoBookStorePage.class
+utility\ConfigFileReader.class
