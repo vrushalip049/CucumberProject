@@ -20,15 +20,18 @@ pipeline {
             }
         }
         stage('Build & Test in Docker') {
-  			steps {
-   				 script {
-   					   docker.build(IMAGE_NAME)
-    				   docker.image(IMAGE_NAME).inside {
-        bat 'mvn clean test'
+      agent {
+        docker { image 'your-docker-image' }
+      }
+      steps {
+        script {
+          docker.build(IMAGE_NAME)
+          docker.image(IMAGE_NAME).inside {
+            bat 'mvn clean test'
+          }
+        }
       }
     }
-  }
-}
          stage('Archive Artifacts') {
       steps {
         archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
