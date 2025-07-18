@@ -19,6 +19,11 @@ pipeline {
                 bat 'mvn test'
             }
         }
+         stage('Archive Artifacts') {
+      steps {
+        archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+      }
+    }
         stage('Publibat Reports') {
             steps {
                 cucumber buildStatus: 'UNSTABLE',
