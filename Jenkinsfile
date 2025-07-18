@@ -20,11 +20,11 @@ pipeline {
             }
         }
         stage('Build & Test in Docker') {
-  steps {
-    script {
-      docker.build(IMAGE_NAME)
-      docker.image(IMAGE_NAME).inside {
-        sh 'mvn clean test'
+  			steps {
+   				 script {
+   					   docker.build(IMAGE_NAME)
+    				   docker.image(IMAGE_NAME).inside {
+        bat 'mvn clean test'
       }
     }
   }
