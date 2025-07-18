@@ -19,11 +19,22 @@ pipeline {
                 bat 'mvn test'
             }
         }
+        stage('Build & Test in Docker') {
+  steps {
+    script {
+      docker.build(IMAGE_NAME)
+      docker.image(IMAGE_NAME).inside {
+        sh 'mvn clean test'
+      }
+    }
+  }
+}
          stage('Archive Artifacts') {
       steps {
         archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
       }
     }
+    
         stage('Publibat Reports') {
             steps {
                 cucumber buildStatus: 'UNSTABLE',

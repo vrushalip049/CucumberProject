@@ -1,11 +1,6 @@
-dockerfile
-CopyEdit
-FROM openjdk:21-jdk-slim
-
-RUN apt-get update && apt-get install -y maven
-
-WORKDIR /usr/src/cucumber-framework
-
+FROM maven:3.8-jdk17
+WORKDIR /app
+COPY pom.xml .
+RUN mvn -B dependency:resolve
 COPY . .
-
-CMD ["mvn", "clean", "verify"]
+CMD ["mvn", "clean", "test"]
