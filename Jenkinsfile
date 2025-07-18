@@ -6,20 +6,20 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/vrushalip049/CucumberProject.git'
+                git 'https://github.com/vrubatalip049/CucumberProject.git'
             }
         }
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                bat 'mvn clean install'
             }
         }
         stage('Test') {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
-        stage('Publish Reports') {
+        stage('Publibat Reports') {
             steps {
                 cucumber buildStatus: 'UNSTABLE',
                          fileIncludePattern: '**/cucumber.json',
