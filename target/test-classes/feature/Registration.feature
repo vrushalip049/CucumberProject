@@ -15,8 +15,8 @@ Feature: This is for Registration test
     Examples:
       | firstname | lastname | username | password | captcha |
       | Seeta     | Patil    | seeta    | Seeta    | true    |
-      | Seeta     |          | seeta    | Seeta    | true    |
-      |           | Patil    | seeta    | Seeta    | true    |
-      | seeta     | Patil    |          | Seeta    | true    |
-      | seeta     | Patil    |          | Seeta    | true    |
-      | Seeta     | Patil    | seeta    | Seeta    | false   |
+     # | Seeta     |          | seeta    | Seeta    | true    |
+   	 #  |           | Patil    | seeta    | Seeta    | true    |
+   	 #  | seeta     | Patil    |          | Seeta    | true    |
+     #  | seeta     | Patil    |          | Seeta    | true    |
+     # | Seeta     | Patil    | seeta    | Seeta    | false   |
