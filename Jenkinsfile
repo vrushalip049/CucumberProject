@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/vrubatalip049/CucumberProject.git'
+                git 'https://github.com/vrushalip049/CucumberProject.git'
             }
         }
         stage('Build') {
