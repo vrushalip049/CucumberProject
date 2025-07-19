@@ -12,37 +12,40 @@ pipeline {
         git 'https://github.com/vrushalip049/CucumberProject.git'
       }
     }
-
-    stage('Build, Test & Package in Docker') {
+    stage('Build & Test (Host)') {
+      steps {
+        bat 'mvn clean test'
+      }
+    }
+    stage('Build Docker Image') {
       steps {
         script {
-          // Build the Docker image using the Dockerfile in repo
-          bat "docker build -t ${env.TAG} ."
-          
-          // Run tests and package inside the container
-          bat """
-            docker run --rm ^
-              ${env.TAG} ^
-              mvn clean package -DskipTests && mvn test
+          // Build the Docker image
+          bat "docker build -t ${TAG} ."
+        }
+      }
+    }
+    stage('Test Inside Docker') {
+     steps {
+    script {
+      // Convert Windows-style path and ensure quoting
+      def winPath = pwd().replaceAll('\\\\', '/').replaceFirst(/^([A-Za-z]):/) { "/${it[1].toLowerCase()}" }
+      bat """
+        docker run --rm ^
+          -v "${winPath}:/workspace" ^
+          -w /workspace ^
+          ${env.TAG} ^
+           java -jar app.jar
           """
         }
       }
     }
-
-    stage('Archive Artifact') {
+    stage('Package & Archive') {
       steps {
-        // Copy the built JAR from the container to workspace
-        script {
-          bat """
-            docker create --name tmp_container ${env.TAG}
-            docker cp tmp_container:/workspace/target/ ./
-            docker rm tmp_container
-          """
-        }
+        bat 'mvn clean package'
         archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
       }
     }
-
     stage('Publish Cucumber Reports') {
       steps {
         cucumber buildStatus: 'UNSTABLE',
