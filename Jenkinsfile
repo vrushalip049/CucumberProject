@@ -1,5 +1,8 @@
 pipeline {
     agent any
+     environment {
+    TAG = "my-app:${env.BUILD_NUMBER}"
+  }
     tools {
         maven 'Maven' // Name configured in Global Tool Configuration
     }
@@ -21,12 +24,12 @@ pipeline {
         }
         stage('Build & Test in Docker') {
       agent {
-        docker { image '"mycompany/my-app:latest"' }
+        docker { image "${TAG}" }
       }
       steps {
         script {
-          docker.build("mycompany/my-app:latest")
-          docker.image("mycompany/my-app:latest").inside {
+          docker.build("${TAG}")
+          docker.image("${TAG}").inside {
             bat 'mvn clean test'
           }
         }
