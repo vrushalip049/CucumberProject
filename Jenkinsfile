@@ -1,43 +1,52 @@
 pipeline {
   agent any
   environment {
-    IMAGE = "my-app:${env.BUILD_NUMBER}"
+    TAG = "my-app:${env.BUILD_NUMBER}"
   }
   tools {
-    maven 'Maven' // from Global Tool Configuration
+    maven 'Maven'
   }
   stages {
-    stage('Checkout & Build') {
+    stage('Checkout') {
       steps {
         git 'https://github.com/vrushalip049/CucumberProject.git'
-        bat 'mvn clean install'
       }
     }
-    stage('Docker Build') {
+    stage('Build & Test (Host)') {
+      steps {
+        bat 'mvn clean test'
+      }
+    }
+    stage('Build Docker Image') {
       steps {
         script {
-          dockerImage = docker.build(IMAGE, '.')
+          // Build the Docker image
+          bat "docker build -t ${TAG} ."
         }
       }
     }
-    stage('Test in Docker') {
+    stage('Test Inside Docker') {
       steps {
         script {
-          // Verify image exists locally
-          bat "docker inspect -f . ${IMAGE}"
-          // Run tests inside the built container
-          dockerImage.inside {
-            bat 'mvn test'
-          }
+          // Convert Windows-style workspace path (e.g., C:\... ) to Unix-style (/c/...)
+          def winPath = pwd().replaceAll('\\\\', '/').replaceFirst(/^([A-Za-z]):/) { "/${it[1].toLowerCase()}" }
+          bat """
+            docker run --rm ^
+              -v ${winPath}:/workspace ^
+              -w /workspace ^
+              ${TAG} ^
+              mvn clean test
+          """
         }
       }
     }
-    stage('Archive Artifacts') {
+    stage('Package & Archive') {
       steps {
+        bat 'mvn clean package'
         archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
       }
     }
-    stage('Publish Reports') {
+    stage('Publish Cucumber Reports') {
       steps {
         cucumber buildStatus: 'UNSTABLE',
                  fileIncludePattern: '**/cucumber.json',
