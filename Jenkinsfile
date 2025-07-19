@@ -21,12 +21,12 @@ pipeline {
         }
         stage('Build & Test in Docker') {
       agent {
-        docker { image 'your-docker-image' }
+        docker { image '"mycompany/my-app:latest"' }
       }
       steps {
         script {
-          docker.build(IMAGE_NAME)
-          docker.image(IMAGE_NAME).inside {
+          docker.build("mycompany/my-app:latest")
+          docker.image("mycompany/my-app:latest").inside {
             bat 'mvn clean test'
           }
         }
