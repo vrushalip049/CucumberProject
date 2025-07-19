@@ -9,7 +9,7 @@ import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-    features = "C:\\Users\\Admin\\2025_eclipse-Automationworkspace\\CucumberProject\\src\\test\\resources\\feature\\Registration.feature",
+    features = "classpath:feature",
     glue = "StepDefinition",
     plugin = {"pretty", "json:target/cucumber.json"}
   //  tags = "@SmokeTest"
