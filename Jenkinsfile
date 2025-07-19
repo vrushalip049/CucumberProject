@@ -26,16 +26,16 @@ pipeline {
       }
     }
     stage('Test Inside Docker') {
-      steps {
-        script {
-          // Convert Windows-style workspace path (e.g., C:\... ) to Unix-style (/c/...)
-          def winPath = pwd().replaceAll('\\\\', '/').replaceFirst(/^([A-Za-z]):/) { "/${it[1].toLowerCase()}" }
-          bat """
-            docker run --rm ^
-              -v ${winPath}:/workspace ^
-              -w /workspace ^
-              ${TAG} ^
-              mvn clean test
+     steps {
+    script {
+      // Convert Windows-style path and ensure quoting
+      def winPath = pwd().replaceAll('\\\\', '/').replaceFirst(/^([A-Za-z]):/) { "/${it[1].toLowerCase()}" }
+      bat """
+        docker run --rm ^
+          -v "${winPath}:/workspace" ^
+          -w /workspace ^
+          ${env.TAG} ^
+          mvn clean test
           """
         }
       }
