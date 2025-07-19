@@ -16,10 +16,5 @@ import io.cucumber.junit.CucumberOptions;
    // plugin = {"pretty", "html:target/cucumber-reports"}
 )
 public class TestRunner {
-	  public static void main(String[] args) {
-	        Main.main(new String[]{
-	            "--glue", "com.yourpackage.stepdefinitions",
-	            "classpath:features"
-	        });
-	    }
+	
 }
