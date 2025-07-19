@@ -1,7 +1,16 @@
 # Build stage
-FROM maven:3.8-jdk17 AS build
+FROM maven:3.8.3-openjdk-17 AS build
+
 WORKDIR /app
 COPY pom.xml .
-RUN mvn -B dependency:resolve
-COPY . .
-RUN mvn -B clean package
+COPY src ./src
+
+RUN mvn clean package -DskipTests
+
+# Runtime stage
+FROM eclipse-temurin:17-jdk-slim
+
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
