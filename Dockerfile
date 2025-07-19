@@ -1,14 +1,13 @@
-# Build stage
-FROM maven:3.8.3-openjdk-17 AS build
+# Build stage – uses Maven with Java 17
+FROM maven:3.8.3-openjdk-17 AS build  # Valid tag for Java 17 :contentReference[oaicite:4]{index=4}
 
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-
 RUN mvn clean package -DskipTests
 
-# Runtime stage
-FROM eclipse-temurin:17-jdk-slim
+# Runtime stage – uses Temurin JDK 17
+FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
