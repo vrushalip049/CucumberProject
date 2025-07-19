@@ -3,47 +3,32 @@ pipeline {
   environment {
     TAG = "my-app:${env.BUILD_NUMBER}"
   }
-  tools {
-    maven 'Maven'
-  }
   stages {
     stage('Checkout') {
-      steps {
-        git 'https://github.com/vrushalip049/CucumberProject.git'
-      }
+      steps { git 'https://github.com/vrushalip049/CucumberProject.git' }
     }
-    stage('Build & Test (Host)') {
-      steps {
-        bat 'mvn clean test'
-      }
-    }
-    stage('Build Docker Image') {
+    stage('Build & Package Docker Image') {
       steps {
         script {
-          // Build the Docker image
-          bat "docker build -t ${TAG} ."
+          bat "docker build -t ${env.TAG} ."
         }
       }
     }
     stage('Test Inside Docker') {
-     steps {
-    script {
-      // Convert Windows-style path and ensure quoting
-      def winPath = pwd().replaceAll('\\\\', '/').replaceFirst(/^([A-Za-z]):/) { "/${it[1].toLowerCase()}" }
-      bat """
-        docker run --rm ^
-          -v "${winPath}:/workspace" ^
-          -w /workspace ^
-          ${env.TAG} ^
-           java -jar app.jar
-          """
-        }
+      steps {
+        bat "docker run --rm ${env.TAG} mvn test"
       }
     }
-    stage('Package & Archive') {
+    stage('Archive Artifact') {
       steps {
-        bat 'mvn clean package'
-        archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+        script {
+          bat """
+            docker create --name tmp ${env.TAG}
+            docker cp tmp:/app/app.jar target/
+            docker rm tmp
+          """
+        }
+        archiveArtifacts artifacts: 'target/app.jar', fingerprint: true
       }
     }
     stage('Publish Cucumber Reports') {
